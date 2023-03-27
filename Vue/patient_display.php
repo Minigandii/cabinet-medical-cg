@@ -1,0 +1,149 @@
+<?php
+
+    require('../Controller/Util.php');
+
+
+    session_start();
+
+    /*-- Verification si le formulaire d'authenfication a été bien saisie --*/
+    if ($_SESSION["acces"] != 'y') {
+        /*-- Redirection vers la page d'authentification --*/
+        header("location:index.php");
+    } else {
+        $Util = new Util();
+        $Utilisateur = $Util->getUtilisateurById($_SESSION["ID_CONNECTED_USER"]);
+        $Secretaire = new Secretaire();
+        $Secretaire = $Utilisateur->getSecretaire();
+
+        $arrayPatient = $Util -> getListPatient();
+    }
+
+?>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <?php
+
+        echo $Secretaire->getNom_Secretaire() . ' ' . $Secretaire->getPrenom_Secretaire();
+        ?>
+    </title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="js/jquery/css/ui-lightness/jquery-ui-1.9.2.custom.css" type="text/css" />
+    <link rel="shortcut icon" href="bootstrap/img/brain_icon_2.ico" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div id="content" class="span9">
+                <div class="main_body">
+
+                    <div class="Home-Header">
+                        <div class="Slogan">
+
+                        </div>
+                        <div class="Contact-Research">
+
+                        </div>
+                        <div class="Logo">
+
+                        </div>
+                    </div>
+                    <div class="Horizontal-menu">
+                        <center>
+                            <h4>
+                                <?php
+                                echo $Secretaire->getNom_Secretaire() . ' ' . $Secretaire->getPrenom_Secretaire();
+                                ?>
+                            </h4>
+                        </center>
+                    </div>
+                    <div class="Left-body">
+                        <div class="Left-body-head">
+                            Liste des patients
+                        </div>
+                        <br><br>
+                        Nom patient :
+                        <input class="textfield_form" type="text" name="Recherche_Patient" size="50"/>
+                        <!-- La recherche ne fonctionne pas donc je l'ai bloqué 
+                        en mettant # dans href au lieu de recherche_patient_display.php -->
+                        <a href="#"><input type="submit" name="rechercher_patient" value = "Rechercher"/>
+                        <br><br>
+                        <div class="infos">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="1">Nom</th>
+                                        <th colspan="1">Prénom</th>
+                                        <th colspan="1">Date de naissance</th>
+                                        <th colspan="1">Departement</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    
+                                    for ($i = 0; $i < count($arrayPatient); $i++) {
+                                        $Patient = $arrayPatient[$i];
+                                        $Nom_Patient = $Patient->getNom_Patient();
+                                        $Prenom_Patient = $Patient->getPrenom_Patient();
+                                        $Date_Naissance_Patient = $Patient->getDate_Naissance_Patient();
+                                        $Departement_Patient = $Patient->getDepartement_Patient();
+
+                                        echo "<tr><td>" . $Nom_Patient . "</td>";
+                                        echo "<td>" . $Prenom_Patient . "</td>";
+                                        echo "<td>" . $Date_Naissance_Patient . "</td>";
+                                        echo "<td>" . $Departement_Patient . "</td>";
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="en_bref">
+
+
+
+                        </div>
+
+
+                    </div>
+                    <div class="Right-body">
+                        <div class="About-us">
+                            <div class="Social-NW-head">
+
+                            </div>
+                            <div class="Social-NW-body">
+
+                                <a href="#"><i class="icon-user"></i> Liste des patients</a>
+                                <br />
+                                <a href="secretaire_display.php"><i class="icon-calendar"></i> Liste des rendez-vous</a>
+                                <br />
+                                <a href="listmedecins_display.php"><i class="icon-calendar"></i> Liste des médecins</a>
+                                <hr />
+                                <a href="ajout_rendezvous.php"><i class="icon-plus-sign"></i> Ajouter un rendez-vous</a>
+                                <br />
+                                <a href="ajout_patient.php"><i class="icon-plus"></i> Nouvelle fiche patient</a>
+                                <hr />
+                                <a href="../Controller/deconnexion.php"><i class="icon-off"></i> Se d&eacute;connecter</a>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="footer">
+                    &COPY; Cabinet Médical 2021
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="bootstrap/js/bootstrap.js')}}"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+</body>
+
+
+
+</html>
